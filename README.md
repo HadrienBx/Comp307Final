@@ -16,3 +16,12 @@ FrontEnd
 - Facebook Login API 
 - HTML, CSS for homepage
 - Login / Sign Up 
+
+for Sunday : 
+
+- Login page
+ >> HTML, CSS
+- Landing page ( With Projects ) 
+ >> 
+- Tree
+ >> MongoDB?
