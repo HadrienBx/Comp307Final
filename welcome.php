@@ -72,6 +72,45 @@ mysqli_close($link);
       margin-left: 5px;
       margin-right: 5px;
     }
+    input[type=text], select {
+      text-align: center;
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #dfecdf;
+      border-radius: 4px;
+      box-sizing: border-box;
+      background-color:	#dfecdf;
+      color: #383838;
+      margin-bottom: 20px;
+    }
+    input[type=date], select{
+      text-align: center;
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #dfecdf;
+      border-radius: 4px;
+      box-sizing: border-box;
+      background-color:	#dfecdf;
+      color: #383838;
+      margin-bottom: 20px;
+    }
+    textarea{
+      text-align: center;
+      width:99%;
+      height: 90px;
+      padding: 12px 20px;
+      display: inline-block;
+      border: 1px solid #dfecdf;
+      border-radius: 4px;
+      box-sizing: border-box;
+      background-color:	#dfecdf;
+      color: #383838;
+      margin-bottom: 20px;
+    }
     </style>
 </head>
 <body>
@@ -107,8 +146,8 @@ mysqli_close($link);
         <div class="col-sm-9 blog-main">
           <!--Displays all Projects in a Grid-->
           <div class="container">
-          <div id="proj" class="row">
-          </div> <!--function adds to this-->
+            <div id="proj" class="row">
+            </div> <!--function adds to this-->
           </div>
           <!--End of Displaying Projects-->
         </div>
@@ -117,7 +156,7 @@ mysqli_close($link);
    <!-- The Modal -->
     <div class="modal fade" id="apMod">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content p-3 mb-2 bg-light text-dark">
         
         <!-- Modal Header -->
         <div class="modal-header">
@@ -128,12 +167,17 @@ mysqli_close($link);
         <!-- Modal body -->
         <div class="modal-body">
             <form name="myForm" action="" onsubmit="return addP()">
-            Project Name: <input type="text" placeholder="What are you working on?" name="projName"><br />
-            Type: <input type="text" size="40" placeholder="Is this personal or professional?" name="projType"><br />
-            Description: <input type="text" placeholder="Describe what you wish to accomplish." name="projDesc"><br/>
-            <!--Things To Add: Due Date and Image-->
-            Due Date: <input id="date" type="date" name="projDue"><br/>
-            Image Hyperlink: <input type="text" placeholder="https://" name="projImg"></br>
+              <h4 class="display-7" style="text-align:center;margin-top:20px;">Project Name</h4>
+              <input type="text" placeholder="What are you working on?" name="projName"><br/>
+              <h4 class="display-6" style="text-align:center">Type of Project</h4>
+              <input type="text" size="40" placeholder="Is this personal or professional?" name="projType"><br/>
+              <h4 class="display-6" style="text-align:center">Description</h4>
+              <textarea name="projDesc" placeholder="Describe what you wish to accomplish."></textarea><br/>
+              <!--Things To Add: Due Date and Image-->
+              <h4 class="display-6" style="text-align:center">Due Date</h4>
+              <input id="date" type="date" name="projDue"><br/>
+              <h4 class="display-6" style="text-align:center">Image Hyperlink</h4>
+              <input type="text" placeholder="https://" name="projImg"></br>
         </div>
         
         <!-- Modal footer -->
