@@ -53,6 +53,7 @@ mysqli_close($link);
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--BootStrap-->
     <title>WOOBS Pro</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <style type="text/css">
         body{ font: 14px sans-serif; text-align: left; }
     </style>
@@ -84,7 +85,7 @@ mysqli_close($link);
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="welcome.php">Home<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="welcome.php"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
@@ -130,8 +131,8 @@ mysqli_close($link);
             Project Name: <input type="text" placeholder="What are you working on?" name="projName"><br />
             Type: <input type="text" size="40" placeholder="Is this personal or professional?" name="projType"><br />
             Description: <input type="text" placeholder="Describe what you wish to accomplish." name="projDesc"><br/>
-            <!--More Things To Add: Due Date and Image-->
-            <!--Due Date: <input id="date" type="date" name="projDue"><br/>-->
+            <!--Things To Add: Due Date and Image-->
+            Due Date: <input id="date" type="date" name="projDue"><br/>
             Image Hyperlink: <input type="text" placeholder="https://" name="projImg"></br>
         </div>
         
@@ -225,7 +226,7 @@ mysqli_close($link);
         var pname = document.forms["myForm"]["projName"].value;
         var ptype = document.forms["myForm"]["projType"].value;
         var pdesc = document.forms["myForm"]["projDesc"].value;
-        //var pdue = document.forms["myForm"]["projDue"].value;
+        var pdue = document.forms["myForm"]["projDue"].value;
         var pimg = document.forms["myForm"]["projImg"].value;
 
         //Show an alert if the fields are blank
@@ -245,7 +246,7 @@ mysqli_close($link);
           }
         }
         //Pass the variables as q, y, z, x, a, and b
-        xhttp.open("GET", "addProject.php?q="+pname+"&y="+ptype+"&z="+user+"&x="+pdesc+"&a="+pimg, true);
+        xhttp.open("GET", "addProject.php?q="+pname+"&y="+ptype+"&z="+user+"&x="+pdesc+"&a="+pimg+"&b="+pdue, true);
         xhttp.send();
         }
       }
