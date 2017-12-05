@@ -153,7 +153,41 @@ mysqli_close($link);
         </div>
     </main>
 
-   <!-- The Modal -->
+
+    <!-- The  About  Modal -->
+    <div class="modal fade" id="aboutMod">
+    <div class="modal-dialog">
+        <div class="modal-content p-3 mb-2 bg-light text-dark">
+        
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title">About</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            <form name="myForm" action="" onsubmit="return addP()">
+              <p class="lead">
+                This is WOOBS Pro, our final project for COMP 307. It is an online work-breakdown structure that allows users to 
+                create projects and append tasks to each project. We store the tasks in a tree structure in our SQL database. 
+                Our front-end consists of HTML, JS, CSS, JavaScript, jQuery and Bootstrap while our back-end consists of mySQL and PHP.
+              <a href="https://www.github.com/hadrienBx/Comp307Final"><i class="fa fa-github-square" aria-hidden="true"></i></a>
+              </p>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        
+        </div>
+    </div>
+    </div>
+    <!--End Of Modal-->
+
+
+   <!-- The Add Project Modal -->
     <div class="modal fade" id="apMod">
     <div class="modal-dialog">
         <div class="modal-content p-3 mb-2 bg-light text-dark">
@@ -196,6 +230,7 @@ mysqli_close($link);
     <div class="container">
       <p class="navbar-text pull-right"><span class="text-muted"</span>
       © 2016 Hadrien Blampoix, Mathieu Estibals, Sophia Hu
+      <a href="https://www.github.com/hadrienBx/Comp307Final"><i class="fa fa-github-square" aria-hidden="true"></i></a>
       </p>
     </div>
     </div>

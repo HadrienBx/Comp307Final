@@ -1,13 +1,3 @@
-For Modal (Jumbotron?)
-- Make site fade out more
-- Color ? ie: black
-- pName,Type,... on a \n
-- Maybe a description for each task
-- Text boxes: 
- --. rounded corners
- --. outline
- --.
-
 Functionality
 - > Make editor look good
 - > 'View' needs a Modal
