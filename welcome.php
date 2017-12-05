@@ -62,36 +62,56 @@ mysqli_close($link);
     <style>
     img {
       width: 100%;
+      margin-bottom: 5px;
     } 
+    #content0 {
+      margin-top: 25px;
+    }
+    #EditProject{
+      margin-left: 5px;
+      margin-right: 5px;
+    }
     </style>
 </head>
 <body>
+    <!--Nav Bar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">WOOBS Pro</a> 
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <!--Navbar, grey with white text-->
-    <nav class="navbar navbar-expand-sm bg-light navbar-light ">
-      <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Logout</a>
-        </li>
-      </ul>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="welcome.php">Home<span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+          <input class="btn btn-outline-secondary my-2 my-sm-0" type="submit" value="Logout">
+        </form>
+      </div>
     </nav>
-    <!--End of Nav Bar-->
-    <!--Not yet functional-->
-    
-    <!--JumboTron-->
-    <!--Make this smaller-->
-    <div class="jumbotron">
-        <h1 class="display-5">Welcome to WOOBS Pro, <b><?php echo $_SESSION['username']; ?></b>.</h1>
-        <p class="lead">Here are all your projects.</p>
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#apMod">Add Project</button>
-        <!--LogOut-->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-        <input type="submit" class="btn btn-secondary btn-lg" value="Logout"></form>
-        <!--End of Logout-->
-    </div>
+
+    <main role="main" class="container-fluid" id="content0">
+      <div class="row">
+        <aside class="col-sm-3 blog-sidebar"> 
+          <div class="jumbotron">
+            <h1 class="display-5">Welcome to WOOBS Pro, <b><?php echo $_SESSION['username']; ?></b>.</h1>
+            <p class="lead">Here are all your projects.</p>
+            <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#apMod">Add Project</button>
+            <button type="button" class="btn btn-secondary btn-md" data-toggle="modal" data-target="#aboutMod">About</button>
+          </div>
+        </aside>
+        <div class="col-sm-9 blog-main">
+          <!--Displays all Projects in a Grid-->
+          <div class="container">
+          <div id="proj" class="row">
+          </div> <!--function adds to this-->
+          </div>
+          <!--End of Displaying Projects-->
+        </div>
+    </main>
 
    <!-- The Modal -->
     <div class="modal fade" id="apMod">
@@ -100,23 +120,24 @@ mysqli_close($link);
         
         <!-- Modal Header -->
         <div class="modal-header">
-            <h4 class="modal-title">Add Project</h4>
+            <h4 class="modal-title">Create A New Project!</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
         <!-- Modal body -->
         <div class="modal-body">
             <form name="myForm" action="" onsubmit="return addP()">
-            <h4>Create a new project!</h4>
-            Project Name: <input type="text" name="projName"><br />
-            Type: <input type="text" name="projType"><br />
-            Description: <input type="text" name="projDesc"><br />
-            <input type="submit" name="Submit"><br />
-            </form>
+            Project Name: <input type="text" placeholder="What are you working on?" name="projName"><br />
+            Type: <input type="text" size="40" placeholder="Is this personal or professional?" name="projType"><br />
+            Description: <input type="text" placeholder="Describe what you wish to accomplish." name="projDesc"><br/>
+            <!--More Things To Add: Due Date and Image-->
+            <!--Due Date: <input id="date" type="date" name="projDue"><br/>-->
+            Image Hyperlink: <input type="text" placeholder="https://" name="projImg"></br>
         </div>
         
         <!-- Modal footer -->
         <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" name="Submit"><br/></form>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
         
@@ -125,12 +146,15 @@ mysqli_close($link);
     </div>
     <!--End Of Modal-->
 
-    <!--Displays all Projects in a Grid-->
+    <!-- Footer --> 
+    <div class="navbar navbar-default navbar-fixed-bottom">
     <div class="container">
-    <div id="proj" class="row">
-    </div> <!--function adds to this-->
+      <p class="navbar-text pull-right"><span class="text-muted"</span>
+      © 2016 Hadrien Blampoix, Mathieu Estibals, Sophia Hu
+      </p>
     </div>
-    <!--End of Displaying Projects-->
+    </div>
+
 
     <script>
 
@@ -146,13 +170,14 @@ mysqli_close($link);
             while (obj[i] != null){
               var node = document.createElement("div");
               node.id = obj[i].p_id;
-              node.className = "col-sm-6 col-md-4 col-lg-3"; //for grid
+              node.className = "col-sm-6 col-md-4 col-lg-4"; //for grid
               var thb = document.createElement("div"); //thumbnail
               thb.className = "thumbnail"; //thumbnail
               var image = document.createElement("img");
-              image.src = "../bootstrapgrid/photo.jpg"; //this links to a photo of hadrien
-              var name = document.createElement("h5"); //project name
-              name.className = "btn btn-outline-primary btn-block";
+              image.src = obj[i].img;
+              if (obj[i].img==null) image.src = "https://www.thephotoargus.com/wp-content/uploads/2017/05/yosemite-3.jpg"; //this links to a photo of hadrien
+              var name = document.createElement("p"); //project name
+              name.className = "alert alert-info";
               name.innerHTML = obj[i].p_name; 
               //name.className = "projName";
               //var type = document.createElement("h6");
@@ -161,18 +186,18 @@ mysqli_close($link);
               //description.innerHTML = obj[i].description; //description
               //description.className = "projDescription"; //for css purposes
               //view : needs modal
-              var view = document.createElement("h6");
+              var view = document.createElement("p");
               view.id = "ViewProject";
-              view.className = "btn btn-outline-success";
+              view.className = "btn btn-primary btn-sm";
               view.innerHTML = "View";
               //edit 
-              var edit = document.createElement("h6");
+              var edit = document.createElement("p");
               edit.id = "EditProject";
-              edit.className = "btn btn-outline-warning";
+              edit.className = "btn btn-secondary btn-sm";
               edit.innerHTML = "Edit";
-              var deleteButton = document.createElement("h5");
+              var deleteButton = document.createElement("p");
               deleteButton.id = "DeleteProj"; //for JavaScript
-              deleteButton.className = "btn btn-outline-danger";
+              deleteButton.className = "btn btn-danger btn-sm";
               deleteButton.innerHTML = "Delete";
               //type.innerHTML = obj[i].type;
               node.appendChild(thb);
@@ -200,10 +225,12 @@ mysqli_close($link);
         var pname = document.forms["myForm"]["projName"].value;
         var ptype = document.forms["myForm"]["projType"].value;
         var pdesc = document.forms["myForm"]["projDesc"].value;
+        //var pdue = document.forms["myForm"]["projDue"].value;
+        var pimg = document.forms["myForm"]["projImg"].value;
 
         //Show an alert if the fields are blank
-        if (pname == "" || ptype=="" || pdesc == "") {
-          alert("Project Name must be filled out");
+        if (pname == "") {
+          alert("Please fill out the project name.");
           return false;
         //Else run the Script to add
         }else{
@@ -217,21 +244,12 @@ mysqli_close($link);
             displayProjects();
           }
         }
-        //Pass the variables as q, y, z and x
-        xhttp.open("GET", "addProject.php?q="+pname+"&y="+ptype+"&z="+user+"&x="+pdesc, true);
+        //Pass the variables as q, y, z, x, a, and b
+        xhttp.open("GET", "addProject.php?q="+pname+"&y="+ptype+"&z="+user+"&x="+pdesc+"&a="+pimg, true);
         xhttp.send();
         }
       }
 
-    </script>
-    <script>
-      // listen if delete is clicked
-      document.getElementById("DeleteProj").onclick = function() {DeleteFunction()};
-
-      function DeleteFunction() {
-          document.getElementById("DeleteProj").innerHTML = "YOU CLICKED ME!";
-          document.getElementById("demo").innerHTML) = "YOU CLICKED MEEEE!";
-      }
     </script>
 </body>
 </html>
