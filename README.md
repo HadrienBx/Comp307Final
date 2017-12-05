@@ -8,3 +8,18 @@ CSS
 - > Logout: append an icon
 - > Change CSS of AddProject Modal 
 - > Add git icon to footer to lead to master repo
+
+List of Technologies:
+
+Back-End:
+>mySQL
+>PHP
+>jSON
+
+Front-End:
+>jQUERY
+>JS
+>CSS
+>HTML
+>Bootstrap
+>
