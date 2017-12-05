@@ -59,10 +59,30 @@ mysqli_close($link);
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <style>
+    img {
+      width: 100%;
+    } 
+    </style>
 </head>
 <body>
+
+    <!--Navbar, grey with white text-->
+    <nav class="navbar navbar-expand-sm bg-light navbar-light ">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Logout</a>
+        </li>
+      </ul>
+    </nav>
+    <!--End of Nav Bar-->
+    <!--Not yet functional-->
     
     <!--JumboTron-->
+    <!--Make this smaller-->
     <div class="jumbotron">
         <h1 class="display-5">Welcome to WOOBS Pro, <b><?php echo $_SESSION['username']; ?></b>.</h1>
         <p class="lead">Here are all your projects.</p>
@@ -126,30 +146,43 @@ mysqli_close($link);
             while (obj[i] != null){
               var node = document.createElement("div");
               node.id = obj[i].p_id;
-              node.className = "col-sm-6 col-md-4"; //for grid
+              node.className = "col-sm-6 col-md-4 col-lg-3"; //for grid
               var thb = document.createElement("div"); //thumbnail
               thb.className = "thumbnail"; //thumbnail
               var image = document.createElement("img");
-              image.src = "../bootstrapgrid/capture.png"; //maybe change this
+              image.src = "../bootstrapgrid/photo.jpg"; //this links to a photo of hadrien
               var name = document.createElement("h5"); //project name
-              name.className = "btn btn-success btn-block";
+              name.className = "btn btn-outline-primary btn-block";
               name.innerHTML = obj[i].p_name; 
               //name.className = "projName";
-              var type = document.createElement("h6");
-              type.className = "btn btn-outline-secondary btn-block";
-              var description = document.createElement("p");
-              description.innerHTML = obj[i].description; //description
+              //var type = document.createElement("h6");
+              //type.className = "btn btn-outline-secondary";
+              //var description = document.createElement("p");
+              //description.innerHTML = obj[i].description; //description
               //description.className = "projDescription"; //for css purposes
+              //view : needs modal
+              var view = document.createElement("h6");
+              view.id = "ViewProject";
+              view.className = "btn btn-outline-success";
+              view.innerHTML = "View";
+              //edit 
+              var edit = document.createElement("h6");
+              edit.id = "EditProject";
+              edit.className = "btn btn-outline-warning";
+              edit.innerHTML = "Edit";
               var deleteButton = document.createElement("h5");
-              deleteButton.className = "btn btn-danger btn-block";
+              deleteButton.id = "DeleteProj"; //for JavaScript
+              deleteButton.className = "btn btn-outline-danger";
               deleteButton.innerHTML = "Delete";
-              type.innerHTML = obj[i].type;
+              //type.innerHTML = obj[i].type;
               node.appendChild(thb);
-              thb.appendChild(image);
               thb.appendChild(name);
-              thb.appendChild(type);
+              thb.appendChild(image);
+              //thb.appendChild(type);
+              thb.appendChild(view);
+              thb.appendChild(edit);
               thb.appendChild(deleteButton);
-              thb.appendChild(description);
+              //thb.appendChild(description);
               project.appendChild(node);
               i++;
             }
@@ -190,6 +223,15 @@ mysqli_close($link);
         }
       }
 
+    </script>
+    <script>
+      // listen if delete is clicked
+      document.getElementById("DeleteProj").onclick = function() {DeleteFunction()};
+
+      function DeleteFunction() {
+          document.getElementById("DeleteProj").innerHTML = "YOU CLICKED ME!";
+          document.getElementById("demo").innerHTML) = "YOU CLICKED MEEEE!";
+      }
     </script>
 </body>
 </html>
