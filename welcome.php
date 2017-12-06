@@ -116,7 +116,7 @@ mysqli_close($link);
 <body>
     <!--Nav Bar-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">wbs</a> 
+      <a class="navbar-brand" href="#">WOOBS Pro</a> 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -135,7 +135,7 @@ mysqli_close($link);
       <div class="row">
         <aside class="col-sm-3 blog-sidebar"> 
           <div class="jumbotron">
-            <h1 class="display-5">Welcome to WOOBS Pro, <b><?php echo $_SESSION['username']; ?></b>.</h1>
+            <h1 class="display-5">Hey, <b><?php echo $_SESSION['username']; ?></b>. Welcome to WBS Pro.</h1>
             <p class="lead">Here are all your projects.</p>
             <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#apMod">Add Project</button>
             <button type="button" class="btn btn-secondary btn-md" data-toggle="modal" data-target="#aboutMod">About</button>
@@ -233,6 +233,29 @@ mysqli_close($link);
     </div>
     </div>
 
+    <!-- Modal for View Project -->
+    <div class="modal fade" id="viewModal" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-content p-3 mb-2 bg-light text-dark">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 id="v_p_name" class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+            <p class="lead">This <b id="v_p_type"></b> project is due <b id="v_p_due"</b></p>
+            <p class="lead" id="v_p_descrip"></p>
+            <p>It was begun on <b id="v_p_start"></b></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <!--End Of HTML-->
 
     <script>
 
@@ -254,6 +277,7 @@ mysqli_close($link);
               var image = document.createElement("img");
               image.src = obj[i].img;
               if (obj[i].img==null) image.src = "https://www.thephotoargus.com/wp-content/uploads/2017/05/yosemite-3.jpg"; //this links to a photo of hadrien
+              //doesn't exactly work
               var name = document.createElement("p"); //project name
               name.className = "alert alert-info";
               name.innerHTML = obj[i].p_name; 
@@ -266,22 +290,22 @@ mysqli_close($link);
               //view : needs modal
 
               var view = document.createElement("p"); //starts copypasta
-              view.method="post";
-              view.action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>";
+              //view.method="post";
+              //view.action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>";
               var inp1 = document.createElement("input");
               inp1.type = "hidden"; //hidden input
               inp1.name = "piD"; //that's the input
               inp1.value = obj[i].p_id; //end of copypasta
-              view.id = "ViewProject";
+              view.id = obj[i].p_id;
               view.appendChild(inp1); //copypasta
               view.className = "btn btn-primary btn-sm";
               view.innerHTML = "View";
+              view.onclick = viewJS;
               //edit 
               var edit = document.createElement("p");
               edit.id = "EditProject";
               edit.className = "btn btn-secondary btn-sm";
               edit.innerHTML = "Edit";
-
               var deleteButton = document.createElement("p");
               deleteButton.id = obj[i].p_id + "del"; //for JavaScript
               deleteButton.className = "btn btn-danger btn-sm";
@@ -366,6 +390,31 @@ mysqli_close($link);
         xhttp.send();
         location.reload();
         }
+      }
+
+      function viewJS(){
+        var pname1=this.id;
+        var a = parseInt(pname1);
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200 || this.readyState == 4 && this.status == 0) {
+            var obj = JSON.parse(this.responseText);
+            // up to here
+            var name = document.getElementById("v_p_name");
+            name.innerHTML = obj[1];
+            var name = document.getElementById("v_p_type");
+            name.innerHTML = obj[2];
+            var name = document.getElementById("v_p_descrip");
+            name.innerHTML = obj[3];
+            var name = document.getElementById("v_p_start");
+            name.innerHTML = obj[4];
+            var name = document.getElementById("v_p_due");
+            name.innerHTML = obj[5];
+          }
+        }
+        xhttp.open("GET", "viewProj.php?a="+a, true);
+        xhttp.send();
+        $("#viewModal").modal();
       }
 
     </script>
