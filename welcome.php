@@ -1,33 +1,18 @@
 <?php
 // Initialize the session
 session_start();
-
+// access DB through $link
 require_once 'db.php';
-
 // If session variable is not set it will redirect to login page
 if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
-  header("location: login.php");
+  header("location: index.php");
   exit;
 }
-$color= "red";
+//get username
 $username1= $_SESSION['username'];
-$sql = "SELECT color FROM users WHERE username='$username1'";
-$result = mysqli_query($link, $sql);
-$color1 = mysqli_fetch_assoc($result);
-$color = $color1["color"];
 
 
-$sql= "SELECT u_id FROM users WHERE username='$username1'";
-$result = mysqli_query($link, $sql);
-$userid = mysqli_fetch_row($result);
-$uid = $userid[0];
-$sql1= "SELECT * FROM projects WHERE p_id = ANY (SELECT p_id FROM project_user WHERE u_id ='$uid')";
-$result1 = mysqli_query($link, $sql1);
-$projects = mysqli_fetch_all($result1,MYSQLI_ASSOC);
-$WBSPROJ = json_encode($projects);
-//echo $WBSPROJ;
-
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if (!empty($_POST['loggg'])) {
   $sql = "UPDATE users SET login = '0' WHERE username = ?";
   if($stmt = mysqli_prepare($link, $sql)){
     mysqli_stmt_bind_param($stmt, "s", $param_username);
@@ -43,6 +28,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   exit;
   mysqli_stmt_close($stmt);
 }
+
+if (!empty($_POST['piD']))  {
+  $pid = $_POST['piD'];
+  session_start();
+  $_SESSION['user'] = $username1;
+  $_SESSION['pid'] = $pid;  
+  header("location: editor.php");
+}
+
+
+
+
+
 mysqli_close($link);
 ?>
 
@@ -63,14 +61,21 @@ mysqli_close($link);
     <style>
     img {
       width: 100%;
+      height: 275px;
       margin-bottom: 5px;
     } 
+    img:hover{
+      opacity: 0.7;
+    }
     #content0 {
       margin-top: 25px;
     }
     #EditProject{
       margin-left: 5px;
       margin-right: 5px;
+    }
+    #inlineform{
+      display: inline-block;
     }
     input[type=text], select {
       text-align: center;
@@ -275,51 +280,49 @@ mysqli_close($link);
               var thb = document.createElement("div"); //thumbnail
               thb.className = "thumbnail"; //thumbnail
               var image = document.createElement("img");
-              image.src = obj[i].img;
-              if (obj[i].img==null) image.src = "https://www.thephotoargus.com/wp-content/uploads/2017/05/yosemite-3.jpg"; //this links to a photo of hadrien
-              //doesn't exactly work
+              image.src = "https://www.thephotoargus.com/wp-content/uploads/2017/05/yosemite-3.jpg"; //default photo
+              if (obj[i].img!="") image.src=obj[i].img; // if photo exists
               var name = document.createElement("p"); //project name
               name.className = "alert alert-info";
-              name.innerHTML = obj[i].p_name; 
-              //name.className = "projName";
-              //var type = document.createElement("h6");
-              //type.className = "btn btn-outline-secondary";
-              //var description = document.createElement("p");
-              //description.innerHTML = obj[i].description; //description
-              //description.className = "projDescription"; //for css purposes
-              //view : needs modal
-
-              var view = document.createElement("p"); //starts copypasta
-              //view.method="post";
-              //view.action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>";
+              name.innerHTML = obj[i].p_name;
+              //Open editor
+              // var view = document.createElement("h6");
+              // view.id = obj[i].p_id + "op";
+              // view.className = "btn btn-outline-success";
+              // view.innerHTML = "Open";
+              // view.onclick = loadEditorFunc;
+              var view = document.createElement("form");
+              view.id = "inlineform";
+              view.method = "post";
+              view.action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>";
               var inp1 = document.createElement("input");
-              inp1.type = "hidden"; //hidden input
-              inp1.name = "piD"; //that's the input
-              inp1.value = obj[i].p_id; //end of copypasta
-              view.id = obj[i].p_id;
-              view.appendChild(inp1); //copypasta
-              view.className = "btn btn-primary btn-sm";
-              view.innerHTML = "View";
-              view.onclick = viewJS;
-              //edit 
-              var edit = document.createElement("p");
-              edit.id = "EditProject";
+              inp1.type = "hidden";
+              inp1.name = "piD";
+              inp1.value = obj[i].p_id;
+              var inp2 = document.createElement("input");
+              inp2.type = "submit";
+              inp2.className = "btn btn-primary btn-sm";
+              inp2.value = "Open";
+              view.appendChild(inp1);
+              view.appendChild(inp2);
+              var edit = document.createElement("h6");
+              edit.id = obj[i].p_id;
               edit.className = "btn btn-secondary btn-sm";
-              edit.innerHTML = "Edit";
-              var deleteButton = document.createElement("p");
+              edit.innerHTML = "View";
+              edit.onclick = viewJS;
+              edit.style = "margin-top:8px;margin-left:5px;margin-right:5px";
+              var deleteButton = document.createElement("h5");
               deleteButton.id = obj[i].p_id + "del"; //for JavaScript
               deleteButton.className = "btn btn-danger btn-sm";
               deleteButton.innerHTML = "Delete";
               deleteButton.onclick = delP;
-              //type.innerHTML = obj[i].type;
+              deleteButton.style = "margin-top:8px";
               node.appendChild(thb);
               thb.appendChild(name);
               thb.appendChild(image);
-              //thb.appendChild(type);
               thb.appendChild(view);
               thb.appendChild(edit);
               thb.appendChild(deleteButton);
-              //thb.appendChild(description);
               project.appendChild(node);
               i++;
             }
