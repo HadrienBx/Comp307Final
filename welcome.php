@@ -116,7 +116,7 @@ mysqli_close($link);
 <body>
     <!--Nav Bar-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">WOOBS Pro</a> 
+      <a class="navbar-brand" href="#">wbs</a> 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -127,9 +127,7 @@ mysqli_close($link);
             <a class="nav-link" href="welcome.php"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-          <input class="btn btn-outline-secondary my-2 my-sm-0" type="submit" value="Logout">
-        </form>
+            <a class="nav-link" href="register.php"><i style="color: black" class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a>
       </div>
     </nav>
 
@@ -266,8 +264,16 @@ mysqli_close($link);
               //description.innerHTML = obj[i].description; //description
               //description.className = "projDescription"; //for css purposes
               //view : needs modal
-              var view = document.createElement("p");
+
+              var view = document.createElement("p"); //starts copypasta
+              view.method="post";
+              view.action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>";
+              var inp1 = document.createElement("input");
+              inp1.type = "hidden"; //hidden input
+              inp1.name = "piD"; //that's the input
+              inp1.value = obj[i].p_id; //end of copypasta
               view.id = "ViewProject";
+              view.appendChild(inp1); //copypasta
               view.className = "btn btn-primary btn-sm";
               view.innerHTML = "View";
               //edit 
@@ -275,10 +281,12 @@ mysqli_close($link);
               edit.id = "EditProject";
               edit.className = "btn btn-secondary btn-sm";
               edit.innerHTML = "Edit";
+
               var deleteButton = document.createElement("p");
-              deleteButton.id = "DeleteProj"; //for JavaScript
+              deleteButton.id = obj[i].p_id + "del"; //for JavaScript
               deleteButton.className = "btn btn-danger btn-sm";
               deleteButton.innerHTML = "Delete";
+              deleteButton.onclick = delP;
               //type.innerHTML = obj[i].type;
               node.appendChild(thb);
               thb.appendChild(name);
@@ -327,6 +335,36 @@ mysqli_close($link);
         //Pass the variables as q, y, z, x, a, and b
         xhttp.open("GET", "addProject.php?q="+pname+"&y="+ptype+"&z="+user+"&x="+pdesc+"&a="+pimg+"&b="+pdue, true);
         xhttp.send();
+        }
+      }
+
+      function delP() {
+
+        // Use the below line to get input from onclick button
+        var pname1 = this.id;
+        var a = parseInt(pname1);   //a = p_id
+
+        // Use the below line to get input from form
+        //var pname = document.forms["myDelForm"]["projName"].value;
+        var b = "<?php echo $_SESSION['username'] ?>";     //b = username
+
+        //Show an alert if the fields are blank
+        if (a == "") {
+          alert("Please Provide a project name.");
+          return false;
+        //Else run the Script to delete
+        }else{
+          //alert(" filled out");
+          var xhttp=new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            //alert(this.readyState);
+            //alert(this.status);
+          if (this.readyState == 4 && this.status == 0) {
+          }
+        }
+        xhttp.open("GET", "deleteProj.php?a="+a+"&b="+b, true);
+        xhttp.send();
+        location.reload();
         }
       }
 

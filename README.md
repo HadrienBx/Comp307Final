@@ -1,7 +1,6 @@
 Functionality
 - > Make editor look good
 - > 'View' needs a Modal
-- > Add 'Delete' Functionality
 - > Possibly add due date as *badge* 
 
 CSS
