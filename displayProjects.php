@@ -11,6 +11,6 @@ $sql1= "SELECT * FROM projects WHERE p_id = ANY (SELECT p_id FROM project_user W
 $result1 = mysqli_query($link, $sql1);
 $projects = mysqli_fetch_all($result1,MYSQLI_ASSOC);
 $WBSPROJ = json_encode($projects);
-echo $WBSPROJ;
+echo $WBSPROJ; //echoes all projects into a JSON string for displayProjectFunction in welcome.php
 
 ?>

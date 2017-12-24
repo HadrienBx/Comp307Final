@@ -1,7 +1,4 @@
 <?php
-//now this php code also adds
-//project due date and image
-//updated by sophia
 
 require_once 'db.php';
 
@@ -18,7 +15,7 @@ $due = $_GET['b'];
 $sql= "INSERT INTO projects (p_name, type, description, due_date, img) VALUES ('$name','$type','$description', '$due','$image')";
 mysqli_query($link, $sql);
 
-// We also have to add into the "project_user" table so the it can get displayed 
+// We also have to add into the "project_user" table so the it can get displayed
 // in the brower by fethching the p_id
 
 // So here we get the p_id
@@ -37,7 +34,7 @@ $uid = $userid[0];
 $sql_proj= "INSERT INTO project_user (p_id, u_id) VALUES ('$pid','$uid')";
 mysqli_query($link, $sql_proj);
 
-//create root tasks
+//create root task
 $sql_task= "INSERT INTO tasks (p_id, parent_id, depth, width, t_name) VALUES ('$pid','0','0','0','$name')";
 mysqli_query($link, $sql_task);
 

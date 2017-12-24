@@ -11,7 +11,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
 //get username
 $username1= $_SESSION['username'];
 
-
+//handle logout post form from logout button
 if (!empty($_POST['loggg'])) {
   $sql = "UPDATE users SET login = '0' WHERE username = ?";
   if($stmt = mysqli_prepare($link, $sql)){
@@ -24,29 +24,26 @@ if (!empty($_POST['loggg'])) {
 
   $_SESSION = array();
   session_destroy();
-  header("location: login.php");
+  header("location: index.php");
   exit;
   mysqli_stmt_close($stmt);
 }
-
+//handle post from clicking on OPEN project button(form) which passes projectID
 if (!empty($_POST['piD']))  {
   $pid = $_POST['piD'];
   session_start();
+  //start new session passing projectID and username to editor.php
   $_SESSION['user'] = $username1;
-  $_SESSION['pid'] = $pid;  
+  $_SESSION['pid'] = $pid;
   header("location: editor.php");
 }
-
-
-
-
-
 mysqli_close($link);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> 
+    <!-- Used Bootstrap 4.0, asscoiated ajax/jquery/js files -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--BootStrap-->
     <title>WOOBS Pro</title>
@@ -63,7 +60,7 @@ mysqli_close($link);
       width: 100%;
       height: 275px;
       margin-bottom: 5px;
-    } 
+    }
     img:hover{
       opacity: 0.7;
     }
@@ -121,7 +118,7 @@ mysqli_close($link);
 <body>
     <!--Nav Bar-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">WOOBS Pro</a> 
+      <a class="navbar-brand" href="#">WOOBS Pro</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -132,13 +129,14 @@ mysqli_close($link);
             <a class="nav-link" href="welcome.php"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
           </li>
         </ul>
-            <a class="nav-link" href="register.php"><i style="color: black" class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a>
+            <a class="nav-link" href="index.php"><i style="color: black" class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a>
       </div>
     </nav>
 
+    <!-- Main Method with sidebar and container-->
     <main role="main" class="container-fluid" id="content0">
       <div class="row">
-        <aside class="col-sm-3 blog-sidebar"> 
+        <aside class="col-sm-3 blog-sidebar">
           <div class="jumbotron">
             <h1 class="display-5">Hey, <b><?php echo $_SESSION['username']; ?></b>. Welcome to WBS Pro.</h1>
             <p class="lead">Here are all your projects.</p>
@@ -161,29 +159,29 @@ mysqli_close($link);
     <div class="modal fade" id="aboutMod">
     <div class="modal-dialog">
         <div class="modal-content p-3 mb-2 bg-light text-dark">
-        
+
         <!-- Modal Header -->
         <div class="modal-header">
             <h4 class="modal-title">About</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        
+
         <!-- Modal body -->
         <div class="modal-body">
             <form name="myForm" action="" onsubmit="return addP()">
               <p class="lead">
-                This is WOOBS Pro, our final project for COMP 307. It is an online work-breakdown structure that allows users to 
-                create projects and append tasks to each project. We store the tasks in a tree structure in our SQL database. 
+                This is WOOBS Pro, our final project for COMP 307. It is an online work-breakdown structure that allows users to
+                create projects and append tasks to each project. We store the tasks in a tree structure in our SQL database.
                 Our front-end consists of HTML, JS, CSS, JavaScript, jQuery and Bootstrap while our back-end consists of mySQL and PHP.
               <a href="https://www.github.com/hadrienBx/Comp307Final"><i class="fa fa-github-square" aria-hidden="true"></i></a>
               </p>
         </div>
-        
+
         <!-- Modal footer -->
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
-        
+
         </div>
     </div>
     </div>
@@ -194,13 +192,13 @@ mysqli_close($link);
     <div class="modal fade" id="apMod">
     <div class="modal-dialog">
         <div class="modal-content p-3 mb-2 bg-light text-dark">
-        
+
         <!-- Modal Header -->
         <div class="modal-header">
             <h4 class="modal-title">Create A New Project!</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        
+
         <!-- Modal body -->
         <div class="modal-body">
             <form name="myForm" action="" onsubmit="return addP()">
@@ -216,19 +214,19 @@ mysqli_close($link);
               <h4 class="display-6" style="text-align:center">Image Hyperlink</h4>
               <input type="text" placeholder="https://" name="projImg"></br>
         </div>
-        
+
         <!-- Modal footer -->
         <div class="modal-footer">
             <input type="submit" class="btn btn-primary" name="Submit"><br/></form>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
-        
+
         </div>
     </div>
     </div>
     <!--End Of Modal-->
 
-    <!-- Footer --> 
+    <!-- Footer -->
     <div class="navbar navbar-default navbar-fixed-bottom">
     <div class="container">
       <p class="navbar-text pull-right"><span class="text-muted"</span>
@@ -241,7 +239,7 @@ mysqli_close($link);
     <!-- Modal for View Project -->
     <div class="modal fade" id="viewModal" role="dialog">
       <div class="modal-dialog">
-      
+
         <!-- Modal content-->
         <div class="modal-content p-3 mb-2 bg-light text-dark">
           <div class="modal-header">
@@ -257,19 +255,21 @@ mysqli_close($link);
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div>
-        
+
       </div>
     </div>
     <!--End Of HTML-->
 
     <script>
-
+      //display projects on load
       function displayProjects(){ //draws the grid
+        //pass in username to obtain userID to get projects from user_projects where userID = this
         var user = "<?php echo $_SESSION['username'] ?>";
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
+            //returns obj of all projects, each is a row
             var obj = JSON.parse(this.responseText);
             var i = 0;
             var project = document.getElementById("proj");
@@ -285,12 +285,6 @@ mysqli_close($link);
               var name = document.createElement("p"); //project name
               name.className = "alert alert-info";
               name.innerHTML = obj[i].p_name;
-              //Open editor
-              // var view = document.createElement("h6");
-              // view.id = obj[i].p_id + "op";
-              // view.className = "btn btn-outline-success";
-              // view.innerHTML = "Open";
-              // view.onclick = loadEditorFunc;
               var view = document.createElement("form");
               view.id = "inlineform";
               view.method = "post";
@@ -323,7 +317,7 @@ mysqli_close($link);
               thb.appendChild(view);
               thb.appendChild(edit);
               thb.appendChild(deleteButton);
-              project.appendChild(node);
+              project.appendChild(node); // for each project, append to grid
               i++;
             }
           }
@@ -349,13 +343,9 @@ mysqli_close($link);
           return false;
         //Else run the Script to add
         }else{
-          //alert(" filled out");
           var xhttp=new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
-            //alert(this.readyState);
-            //alert(this.status);
           if (this.readyState == 4 && this.status == 0) {
-            //document.getElementById("result").innerHTML = this.responseText;
             displayProjects();
           }
         }
@@ -381,11 +371,8 @@ mysqli_close($link);
           return false;
         //Else run the Script to delete
         }else{
-          //alert(" filled out");
           var xhttp=new XMLHttpRequest();
           xhttp.onreadystatechange = function() {
-            //alert(this.readyState);
-            //alert(this.status);
           if (this.readyState == 4 && this.status == 0) {
           }
         }
@@ -395,7 +382,7 @@ mysqli_close($link);
         }
       }
 
-      function viewJS(){
+      function viewJS(){ //for viewing modal
         var pname1=this.id;
         var a = parseInt(pname1);
         var xhttp = new XMLHttpRequest();
@@ -417,7 +404,7 @@ mysqli_close($link);
         }
         xhttp.open("GET", "viewProj.php?a="+a, true);
         xhttp.send();
-        $("#viewModal").modal();
+        $("#viewModal").modal(); //opens view modal
       }
 
     </script>

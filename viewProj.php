@@ -9,6 +9,6 @@ $sql1= "SELECT * FROM projects WHERE p_id = '$p_id'"; //select all from projects
 $result1 = mysqli_query($link, $sql1);
 $projects = mysqli_fetch_row($result1);
 $WBSPROJ = json_encode($projects);
-echo $WBSPROJ;
+echo $WBSPROJ; //echoes project as string
 
 ?>

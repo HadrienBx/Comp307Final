@@ -1,9 +1,9 @@
 <?php
-// Initialize the session
+// Initialize the session launched by welcome.php
 session_start();
 // access DB through $link
 require_once 'db.php';
-// If session variable is not set it will redirect to login page
+// If session variables are not set it will redirect to login page
 if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
   header("location: index.php");
   exit;
@@ -12,18 +12,19 @@ if(!isset($_SESSION['pid']) || empty($_SESSION['pid'])){
   header("location: index.php");
   exit;
 }
-//get user and pid
+//get username (unique and used to get key unique u_id) and p_id (unique project id)
 $user= $_SESSION['user'];
 $user= $_SESSION['pid'];
-
 ?>
 
+<!-- HTML5 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--BootStrap-->
     <title>WOOBS Editor</title>
+    <!-- Link BOOTSTRAP CSS/JS  -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -140,130 +141,96 @@ $user= $_SESSION['pid'];
     }
     </style>
 </head>
-<body onresize="<script>location.reload();</script>">
-  <!--Nav Bar-->
+
+<body>
+    <!--Nav Bar-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">WOOBS Pro</a> 
+      <a class="navbar-brand" href="#">WOOBS Pro</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
+      <!-- Home/Logout Button -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
             <a class="nav-link" href="welcome.php"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
           </li>
         </ul>
-            <a class="nav-link" href="register.php"><i style="color: black" class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a>
+            <a class="nav-link" href="index.php"><i style="color: black" class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a>
       </div>
     </nav>
-
     <!--Main-->
     <main role="main" class="container-fluid" id="content0">
       <div class="row" style="height: 800px">
         <div class="col-sm-9 col-md-9">
+          <!-- Tree Display -->
           <div id="canvas-wrap">
+              <!-- Canvas used to draw lines connecting tasks-->
               <canvas id="myCanvas"></canvas>
+              <!-- Tasks buttons are appended to tree div -->
               <div id="tree"></div>
           </div>
         </div>
-
-
-
-
-  <aside class="col-sm-3 col-md-3">
-  <div id="displayTask" class="dispT">
-    <div id="taskInfo" style="display:block">
-      <div id="name" class="lead"><br />Name: </div>
-      <div id="desc" class="lead"><br />Description: </div>
-      <div id="dueD" class="lead"><br />Due Date: </div>
-      <div id="prog" class="lead"><br />Progress: </div>
-    </div>
-    <!--
-    <div id="taskForm" style="display:none">
-      <form name="taskEditForm" action="" onsubmit="return taskFormSend()">
-        Task Name: <input type="text" name="nameF"><br />
-        Description: <input type="text" name="descriptionF"><br />
-        <div id="curD"></div>
-        Due Date: <input type="date" name="dueDateF"><br />
-        Progress: <input type="number" name="progF"><br />
-        <input type="submit" name="Submit"><br />
-      </form>
-    </div>
-    -->
-    
-    <!--<div id="addTaskForm" style="display:none">
-      <form name="addTaskFormF" action="" onsubmit="return addTaskFormSend()">
-        Task Name: <input type="text" name="nameF"><br />
-        <input type="submit" name="Submit"><br />
-      </form>
-    </div>-->
-    <div id="taskCancel" style="display:none">
-      <br />
-      <button id="editCancel" onclick="editCancelFunc()">Cancel</button>
-    </div>
-    <div id="editTask" style="display:block">
-      <br />
-      <button class="btn btn-success " id="editTButt" data-toggle="modal" data-target="#editTaskMod">Edit Task</button>
-      <!--<button class="btn btn-success btn-sm" id="editTButt" onclick="editTaskFunc()">Edit Task</button>-->
-    </div>
-    <div id="addChild" style="display:block">
-      <button class="btn btn-success "id="addChildButt" data-toggle="modal" data-target="#addChildMod">Add Child</button>
-      <!--<button class="btn btn-success btn-sm"id="addChildButt" onclick="addChildFunc()">Add Child</button>-->
-    </div>
-    <div id="delTask" style="display:block">
-      <button class="btn btn-success " id="delTaskB" data-toggle="modal" data-target="#deleteTaskModal">Delete Task</button>
-      <!--<button class="btn btn-success " id="delTaskB" onclick="delTaskFunc()">Delete Task</button>-->
-    </div>
-  </div>
-</aside>
-
-  </div>
-</main>
-
-
-
-<!--Add Child Modal-->
-<div class="modal fade" id="addChildMod">
-    <div class="modal-dialog">
+        <!-- SideBar -->
+        <aside class="col-sm-3 col-md-3">
+          <div id="displayTask" class="dispT">
+            <div id="taskInfo" style="display:block">
+              <div id="name" class="lead"><br />Name: </div>
+              <div id="desc" class="lead"><br />Description: </div>
+              <div id="dueD" class="lead"><br />Due Date: </div>
+              <div id="prog" class="lead"><br />Progress: </div>
+            </div>
+            <div id="taskCancel" style="display:none">
+              <br />
+              <button id="editCancel" onclick="editCancelFunc()">Cancel</button>
+            </div>
+            <div id="editTask" style="display:block">
+              <br />
+              <button class="btn btn-success " id="editTButt" data-toggle="modal" data-target="#editTaskMod">Edit Task</button>
+            </div>
+            <div id="addChild" style="display:block">
+              <button class="btn btn-success "id="addChildButt" data-toggle="modal" data-target="#addChildMod">Add Child</button>
+            </div>
+            <div id="delTask" style="display:block">
+              <button class="btn btn-success " id="delTaskB" data-toggle="modal" data-target="#deleteTaskModal">Delete Task</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <!-- Modals to display forms -->
+    <!--Add Child Modal-->
+    <div class="modal fade" id="addChildMod">
+      <div class="modal-dialog">
         <div class="modal-content p-3 mb-2 bg-light text-dark">
-        
-        <!-- Modal Header -->
-        <div class="modal-header">
+          <!-- Modal Header -->
+          <div class="modal-header">
             <h4 class="modal-title">Add Child Node!</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
+          </div>
+          <!-- Modal body -->
+          <div class="modal-body">
             <form name="addTaskFormF" action="" onsubmit="return addTaskFormSend()">
               <h4 class="display-7" style="text-align:center;margin-top:20px;">Task Name</h4>
               <input type="text" placeholder="What do you want to accomplish next?" name="nameF"><br/>
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
+          </div>
+          <!-- Modal footer -->
+          <div class="modal-footer">
             <input type="submit" class="btn btn-primary" name="Submit"><br/></form>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
         </div>
-        
-        </div>
+      </div>
     </div>
-    </div>
-    <!--End Of Modal-->
-
-<!--Edit Task Modal-->
-
-<div class="modal fade" id="editTaskMod">
-    <div class="modal-dialog">
+    <!--Edit Task Modal-->
+    <div class="modal fade" id="editTaskMod">
+      <div class="modal-dialog">
         <div class="modal-content p-3 mb-2 bg-light text-dark">
-        
         <!-- Modal Header -->
         <div class="modal-header">
             <h4 class="modal-title">Edit Task!</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        
         <!-- Modal body -->
         <div class="modal-body">
             <form name="taskEditForm" action="" onsubmit="return taskFormSend()">
@@ -277,32 +244,25 @@ $user= $_SESSION['pid'];
               <h4 class="display-7" style="text-align:center;margin-top:20px;">Progress (zero to a hunnid)</h4>
               <input type="number" name="progF"><br />
         </div>
-        
         <!-- Modal footer -->
         <div class="modal-footer">
             <input type="submit" class="btn btn-primary" name="Submit"><br/></form>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
-        
         </div>
+      </div>
     </div>
-    </div>
-<!--End Of Modal-->
-
-<!--Delete Task Modal-->
-<div class="modal fade" id="deleteTaskModal">
-    <div class="modal-dialog">
+    <!--Delete Task Modal-->
+    <div class="modal fade" id="deleteTaskModal">
+      <div class="modal-dialog">
         <div class="modal-content p-3 mb-2 bg-light text-dark">
-        
         <!-- Modal Header -->
         <div class="modal-header">
             <h4 class="modal-title">Delete Task</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
-        
         <!-- Modal body -->
         <div class="modal-body">
-            
           <div id="delSingleTask" style="display:block">
             <button id="delSingleTaskB" class="btn btn-warning" onclick="delSingleTaskFunc()">Delete Single Task</button>
           </div>
@@ -310,22 +270,18 @@ $user= $_SESSION['pid'];
             <button id="delAllTaskB" class="btn btn-danger" onclick="delAllTaskFunc()">Delete Sub-Tree</button>
           </div>
         </div>
-        
         <!-- Modal footer -->
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
-        
         </div>
+      </div>
     </div>
-    </div>
-<!--End Of Modal-->
 
+<!-- JAVASCRIPT -->
   <script>
 
-
-
-    //finds absolute position of object > used to draw lines
+    //finds absolute position of object, used to draw lines between tasks once they have been created and positioned
     function findPos(obj) {
       var curLeft = curTop = 0;
       if (obj.offsetParent) {
@@ -337,35 +293,39 @@ $user= $_SESSION['pid'];
       return {x:curLeft, y:curTop};
     }
 
-    //displays tree
+    //displays tree displays the entire tree upon reload
     function displayTree(){
-        //extract object
+        //extract projectID from php session variable
         var pid = "<?php echo $_SESSION['pid'] ?>";
+        //Variables in database used to dynamically create tree
+        //t_id = unique task id
+        //parent_id = t_id of parent, 0 if task is root
+        //depth = distance from root, root = 0
+        //width = 0 for left most sibling, width = max(width of all siblings) for right most sibling
+        //XML request to obtain all of the tasks associated with PID
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
-
+            //receive all tasks as obj[] ordered by increasing depth, width
             var obj = JSON.parse(this.responseText);
-            //calculate width % of each node
+            //Now we calculate some values for each task that will help position them
             //calculate #children for each node
             var allChi = [];
-
             //initialize allChi to 0
             var i = 0;
             while (obj[i] != null){
                 allChi[obj[i].t_id] = 0;
               i++;
             }
-
             //add +1 of allChi each time a task is a child of that node
             i=0;
             while (obj[i] != null){
                 allChi[obj[i].parent_id] += 1;
               i++;
             }
-
-            //calculate width of each node according to # of siblings and width of parent
+            //calculate width of each node dividing width of parent by #of siblings
+            //root task = 100% width
             //initialize to 0
             i=0;
             var allWidth = [];
@@ -374,83 +334,91 @@ $user= $_SESSION['pid'];
               i++;
             }
             i=1;
+            //initialize root node to 100% width
             allWidth[obj[0].t_id] = 100;
             while (obj[i] != null){
               allWidth[obj[i].t_id] = allWidth[obj[i].parent_id] / allChi[obj[i].parent_id];
               i++;
             }
-
-            //initialize absolute_left_position of div containing each node
+            //calculate absolute_left_position of div containing each node
+            //initialize to 0
+            //this will be set in the coming while loop
             i=0;
             var absL = [];
             while (obj[i] != null){
                 absL[obj[i].t_id] = 0;
               i++;
             }
-            //absL[0] = 15;
-
-            //find width of canvas
+            //calculate width of canvas for rendering and positioning purposes
             var element = document.getElementById("myCanvas");
             var propertiess = window.getComputedStyle(element, null);
             var widthCa = parseFloat(propertiess.width);
-            console.log(widthCa);
+            //console.log(widthCa); //for testing purposes
+            //set width and height of canvas to calculated width to enable accurate rendering
             document.getElementById('myCanvas').setAttribute("width", widthCa);
             document.getElementById('myCanvas').setAttribute("height",widthCa);
-            // var x = document.getElementById("myCanvas");
-            // x.style.width = 'widthCa';
-            // x.style.height = 'widthCa';
-
-
+            //
             var offLCa = findPos(document.getElementById("myCanvas"))
             console.log(offLCa);
-
-
-            //dynamically display tree
+            //now we are ready to dynamically display the tree
+            //obtain tree div that we will append to
             var tree = document.getElementById("tree");
+            //initialize variable to keep track of depth of previously considered node so we know when to create a new level
             var prevDepth = 0;
             i= 0;
-            //a level is row (depth = x)
+            //div containing a level of the tree (depth = x)
+            //create first row
             var level = document.createElement("div");
             level.className = "roww";
             level.style.width = '100%';
-            //element.style.property = new style
+            //loop through every task in project by depth,width starting with root
             while (obj[i] != null){
-              if (obj[i].depth > prevDepth){  //if new row, appen previous level to tree and create a new one
+              //if new row, append previous row to tree
+              if (obj[i].depth > prevDepth){
                 tree.appendChild(level);
+                //update previous depth
                 prevDepth = obj[i].depth;
+                //create new row
                 var level = document.createElement("div");
                 level.className = "roww";
                 level.style.width = '100%';
               }
-              //node is div representing a task, containing the button
+              //create div ('node') which will contain a task button
               var node = document.createElement("div");
               node.className = "task";
               //set width of node according to precalculated width
               node.style.width = allWidth[obj[i].t_id] + "%";
               node.style.position= "absolute";
+              //calculate the absolute_left_position position of the node by setting it to that of its parent
+              //then update the absolute_left_position of its parent to += width of current node * width of canvas / 100(because width is a %)
+              //although this will not update the position of the parent as it has already been set, it will let the next right child of the parent position itself
               if (i != 0){
                 absL[obj[i].t_id] = absL[obj[i].parent_id];
                 absL[obj[i].parent_id] += allWidth[obj[i].t_id] * (widthCa/100);
               }
               node.style.left= absL[obj[i].t_id] + "px";
-              //butt is the button element that adds functionality to the task
+              //create button element that adds functionality to the task
               var butt = document.createElement("button");
               butt.innerHTML = obj[i].t_name;
               butt.className = "taskbutton";
-              //set button id to t_id to locate later on
+              //set button id to unique t_id of task so that the id can be passed as 'this.id' to a function when button is clicked
               butt.id= obj[i].t_id;
+              //append button to container node
               node.appendChild(butt);
+              //add even which calls showTask function to button
               butt.onclick = showTask;
+              //append node containing task to level div containing all tasks with depth=x
               level.appendChild(node);
               i++;
             }
+            //append last level
             tree.appendChild(level);
 
-            //draw lines using Canvas
-            i = 0;
+            //now we draw lines connecting buttons using Canvas
+            //we want to determine the center top and center bottom position for each button
             var posT = [];  //Top position
             var posB = [];  //Bottom position
-
+            i = 0;
             //initialize to 0
             while (obj[i] != null){
                 posT[obj[i].t_id] = 0;
@@ -461,25 +429,26 @@ $user= $_SESSION['pid'];
                 posB[obj[i].t_id] = 0;
               i++;
             }
-
-
-            //set top and bottom position of each button(task) using findPos function which returns [x,y] coordinates
+            //set top and bottom position of each button(task)
+            //using findPos function which returns [x,y] coordinates of the top left corner of buttons
+            //however this position is not exact when using bootstrap
             i=0;
             while (obj[i] != null){
               posT[obj[i].t_id] = findPos(document.getElementById(obj[i].t_id));
               posB[obj[i].t_id] = findPos(document.getElementById(obj[i].t_id));
-              //we have not set the width of the button (only the div it is in) and therefore must extract it as such
+              //now calculate width of button, used to find the center of button
               var elem = document.getElementById(obj[i].t_id);
               var properties = window.getComputedStyle(elem, null);
               var width1 = parseFloat(properties.width);
+              //console.log(posT[obj[i].t_id].x);
+              //console.log(posT[obj[i].t_id].y);
+              //console.log(width1/2);
               //now we add half of the width to the x-coordinates
-              console.log(posT[obj[i].t_id].x);
-              console.log(posT[obj[i].t_id].y);
-              console.log(width1/2);
+              //we also adjust the y-coordinate to have posB point to bottom, and to account for Bootstrap offsets
               posT[obj[i].t_id].x += (width1/2);
               posT[obj[i].t_id].y -= 86;
               posB[obj[i].t_id].x += (width1/2);
-              posB[obj[i].t_id].y += -63;
+              posB[obj[i].t_id].y -= 63;
               i++;
             }
 
@@ -495,20 +464,14 @@ $user= $_SESSION['pid'];
             }
           }
         }
+        //this sends the request for the tasks object to displayTree.php, sending the unique projectID
         xhttp.open("GET", "displayTree.php?q="+pid, true);
         xhttp.send();
-        //for testing purposes
-        // var dem = document.getElementById("demo");
-        // var elem = document.getElementById(obj[i].t_id);
-        // var properties = window.getComputedStyle(elem, null);
-        // var width1 = properties.width;
-        // var width2 = parseFloat(width1)/2;
-        // dem.innerHTML = width2;
     }
+    //call function on load
     displayTree();
 
-    //display task when clicked on
-    //current variables
+    //Initialize current variables to be set when clicking on task button and used for tree editing
     var p_idC;
     var t_idC;
     var parent_idC;
@@ -518,17 +481,21 @@ $user= $_SESSION['pid'];
     var dueDateC;
     var progC;
     var widthC;
+    //diplays task info in side bar and sets task info to current vars, called when clicking a task button
     function showTask() {
+        //button.id was set to unique taskID
         t_idC= this.id;
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
             var obj = JSON.parse(this.responseText);
+            //set current variables
             p_idC = obj[0];
             parent_idC= obj[2];
             widthC = obj[4];
             depthC = parseInt(obj[3]);
+            //set innerHTML of display section of sidebar
             var temp = document.getElementById("name");
             temp.innerHTML = "<br />Name: " + obj[5];
             nameC = obj[5];
@@ -541,73 +508,12 @@ $user= $_SESSION['pid'];
             var temp = document.getElementById("prog");
             temp.innerHTML = "<br />Progress: " + obj[8] + "<br />";
             progC = obj[8];
-            var x = document.getElementById("taskForm");
-            x.style.display = "none";
-            var x = document.getElementById("taskCancel");
-            x.style.display = "none";
-            var x = document.getElementById("taskInfo");
-            x.style.display = "block";
-            var x = document.getElementById("editTask");
-            x.style.display = "block";
-            var x = document.getElementById("addChild");
-            x.style.display = "block";
-            var x = document.getElementById("addTaskForm");
-            x.style.display = "none";
-            var x = document.getElementById("delTask");
-            x.style.display = "block";
-            var x = document.getElementById("delSingleTask");
-            x.style.display = "none";
-            var x = document.getElementById("delAllTask");
-            x.style.display = "none";
-
           }
         }
         xhttp.open("GET", "displayTask.php?q="+this.id, true);
         xhttp.send();
     }
-
-    function editTaskFunc() {
-      var x = document.getElementById("taskForm");
-      x.style.display = "block";
-      var x = document.getElementById("taskCancel");
-      x.style.display = "block";
-      var x = document.getElementById("taskInfo");
-      x.style.display = "none";
-      var x = document.getElementById("editTask");
-      x.style.display = "none";
-      var x = document.getElementById("addChild");
-      x.style.display = "none";
-      var x = document.getElementById("addTaskForm");
-      x.style.display = "none";
-      document.forms["taskEditForm"]["nameF"].placeholder = nameC;
-      document.forms["taskEditForm"]["descriptionF"].placeholder = descriptionC;
-      var x = document.getElementById("curD");
-      x.innerHTML = "Current Due Date: " + dueDateC;
-      //document.forms["taskEditForm"]["dueDateF"].placeholder = dueDateC;
-      document.forms["taskEditForm"]["progF"].placeholder = progC;
-    }
-
-    function editCancelFunc() {
-      var x = document.getElementById("taskForm");
-      x.style.display = "none";
-      var x = document.getElementById("taskCancel");
-      x.style.display = "none";
-      var x = document.getElementById("taskInfo");
-      x.style.display = "block";
-      var x = document.getElementById("editTask");
-      x.style.display = "block";
-      var x = document.getElementById("addChild");
-      x.style.display = "block";
-      var x = document.getElementById("addTaskForm");
-      x.style.display = "none";
-      var x = document.getElementById("delTask");
-      x.style.display = "block";
-      var x = document.getElementById("delSingleTask");
-      x.style.display = "none";
-      var x = document.getElementById("delAllTask");
-      x.style.display = "none";
-    }
-
+    //edit task form > XMLHTTP > editTask.php
     function taskFormSend() {
       var a = t_idC;
       var b = document.forms["taskEditForm"]["nameF"].value;
@@ -625,22 +531,7 @@ $user= $_SESSION['pid'];
       xhttp.send();
 
     }
-
-    function addChildFunc() {
-      var x = document.getElementById("taskForm");
-      x.style.display = "none";
-      var x = document.getElementById("taskCancel");
-      x.style.display = "block";
-      var x = document.getElementById("taskInfo");
-      x.style.display = "none";
-      var x = document.getElementById("editTask");
-      x.style.display = "none";
-      var x = document.getElementById("addChild");
-      x.style.display = "none";
-      var x = document.getElementById("addTaskForm");
-      x.style.display = "block";
-    }
-
+    //add task form > XMLHTTP > addTask.php
     function addTaskFormSend() {
       var a = p_idC;                //p_id of new node
       var b = t_idC;                //parent_id of new node = current t_id
@@ -650,35 +541,13 @@ $user= $_SESSION['pid'];
       xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          
+
         }
       }
-      xhttp.open("GET", "addTaskTest.php?a="+a+"&b="+b+"&c="+c+"&d="+d, true);
+      xhttp.open("GET", "addTask.php?a="+a+"&b="+b+"&c="+c+"&d="+d, true);
       xhttp.send();
     }
-
-    function delTaskFunc() {
-      var x = document.getElementById("taskForm");
-      x.style.display = "none";
-      var x = document.getElementById("taskCancel");
-      x.style.display = "block";
-      var x = document.getElementById("taskInfo");
-      x.style.display = "block";
-      var x = document.getElementById("editTask");
-      x.style.display = "none";
-      var x = document.getElementById("addChild");
-      x.style.display = "none";
-      var x = document.getElementById("addTaskForm");
-      x.style.display = "none";
-      var x = document.getElementById("delTask");
-      x.style.display = "none";
-      var x = document.getElementById("delSingleTask");
-      x.style.display = "block";
-      var x = document.getElementById("delAllTask");
-      x.style.display = "block";
-
-    }
-
+    //delete single task button > XMLHTTP > deleteTask.php
     function delSingleTaskFunc() {
       var x = document.getElementById("delSingleTask");
       x.style.display = "none";
@@ -699,14 +568,14 @@ $user= $_SESSION['pid'];
             location.reload();
           }
         }
-        xhttp.open("GET", "deleteTaskTest.php?a="+a+"&b="+b+"&c="+c+"&d="+d+"&e="+e+"&f="+f, true);
+        xhttp.open("GET", "deleteTask.php?a="+a+"&b="+b+"&c="+c+"&d="+d+"&e="+e+"&f="+f, true);
         xhttp.send();
       }else{
         delTaskFunc();
       }
 
     }
-
+    //delete all task button > XMLHTTP > deleteTask.php
     function delAllTaskFunc() {
       var x = document.getElementById("delSingleTask");
       x.style.display = "none";
@@ -727,15 +596,13 @@ $user= $_SESSION['pid'];
             location.reload();
           }
         }
-        xhttp.open("GET", "deleteTaskTest.php?a="+a+"&b="+b+"&c="+c+"&d="+d+"&e="+e+"&f="+f, true);
+        xhttp.open("GET", "deleteTask.php?a="+a+"&b="+b+"&c="+c+"&d="+d+"&e="+e+"&f="+f, true);
         xhttp.send();
 
       }else{
         delTaskFunc();
       }
     }
-
   </script>
-
 </body>
 </html>
